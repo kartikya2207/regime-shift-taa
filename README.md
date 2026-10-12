@@ -27,6 +27,9 @@ prices + India VIX ──> features (1d log-return, 63d momentum, 21d realized v
       ──> backtest: weights.shift(1), 10 bps costs, 2-day regime-confirmation debounce
 ```
 
+![Detected regimes](results/regimes.png)
+*Out-of-sample Bull/Bear/Crisis labels (causal Viterbi) shaded over the Nifty 50.*
+
 Key decisions:
 - **3 states and diagonal covariance.** Each extra state adds a whole (mu, Sigma) block to estimate from limited daily data. A full covariance would triple the parameters for each state. Fitting from 5 EM seeds makes up for the rougher fit.
 - **Relabeling states by volatility in every fold.** The index of an HMM state is arbitrary from one fit to the next. Sorting the states by the mean of the volatility feature gives them stable names, which also solves the problem of matching states across folds.
@@ -40,6 +43,12 @@ Key decisions:
 | Regime-TAA (net) | 12.5% | 9.3% | 1.35 | -10.4% |
 | 60/40 static | 9.4% | 7.7% | 1.22 | -9.5% |
 | Equal-weight | 16.5% | 9.1% | 1.82 | -12.0% |
+
+![Equity curves](results/equity_curves.png)
+*Net equity curves (log scale) for Regime-TAA vs the 60/40 and equal-weight benchmarks.*
+
+![Drawdowns](results/drawdown.png)
+*Drawdowns over the out-of-sample window.*
 
 So the strategy beat 60/40 on return and Sharpe. **It did not beat a plain equal-weight portfolio**, which had a higher Sharpe, Sortino and Calmar over this window. I have kept that result in rather than tuning until it went away.
 
